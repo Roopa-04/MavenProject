@@ -1,4 +1,4 @@
-package selenium.programs;
+package selenium.webactions;
 
 import java.time.Duration;
 
@@ -108,25 +108,27 @@ public class Program2 {
 		
 		//select the date
 		WebElement dateElement = driver.findElement(By.xpath("//div[text()='"+date+"' and contains(@aria-label,'"+month+"')]"));
-		dateElement.click();	
-//		js.executeScript("arguments[0].click();", dateElement);
+		//dateElement.click();	
+		js.executeScript("arguments[0].click();", dateElement);
 	}
 	
 	public static void selectSubject(String subject) {
-		WebElement subjectInput = driver.findElement(By.xpath("//input[@id='subjectsInput']"));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));//wait for the suggestion to appear
+	    Actions actions = new Actions(driver); //enter characters using Actions class
 		
-		//enter characters using Actions class
-		Actions actions = new Actions(driver);
+	    WebElement subjectInput = driver.findElement(By.xpath("//input[@id='subjectsInput']"));
+	    js.executeScript("arguments[0].scrollIntoView(true); arguments[0].click();", subjectInput);
+				
 		actions.sendKeys(subjectInput, subject).perform();
 		
-		//wait for the suggestion to appear (Until subject element is loaded, freeze the screen- mouse over until the text box and label is highlighted once it is highlighted, right click on it, Break on->subtree modifications(It gives the control to the user))
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		//wait for the suggestion to appear 
+		//(Until subject element is loaded, freeze the screen- mouse over until the text box and label is highlighted once it is highlighted, right click on it, Break on->subtree modifications(It gives the control to the user))
+		//WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[text()='"+subject+"' and contains(@class,'option')]"), 0));
 		
 		//click on the suggestion
 		WebElement subjectOption = driver.findElement(By.xpath("//div[text()='"+subject+"' and contains(@class,'option')]"));
-		//subjectOption.click();
-		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", subjectOption);			
 	}
 		

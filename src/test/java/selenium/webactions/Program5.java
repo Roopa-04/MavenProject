@@ -1,4 +1,4 @@
-package selenium.programs;
+package selenium.webactions;
 
 import java.io.File;
 import java.io.IOException;
